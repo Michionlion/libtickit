@@ -6,7 +6,9 @@ extern "C" {
 #define __TICKIT_H__
 
 /* We'd quite like the timer*() functions */
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#endif
 
 #include <stdarg.h>
 #include <stdbool.h>
