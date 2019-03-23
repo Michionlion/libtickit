@@ -1,6 +1,4 @@
-# `libtickit`
-
-## Terminal Interface Construction Kit
+# libtickit: Terminal Interface Construction Kit
 
 This library provides an abstracted mechanism for building interactive
 full-screen terminal programs. It provides a full set of output drawing
