@@ -5,6 +5,8 @@ extern "C" {
 #ifndef __TICKIT_EVLOOP_H__
 #define __TICKIT_EVLOOP_H__
 
+#include "tickit.h"
+
 /*
  * The contents of this file should be considered entirely experimental, and
  * subject to any change at any time. We make no API or ABI stability
