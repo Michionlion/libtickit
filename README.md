@@ -4,6 +4,8 @@ This library provides an abstracted mechanism for building interactive
 full-screen terminal programs. It provides a full set of output drawing
 functions, and handles keyboard and mouse input events.
 
+## Overview
+
 Using this library, applications can
 
 * Divide the terminal into a hierarchy of nested, possibly overlapping
