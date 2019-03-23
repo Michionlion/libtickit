@@ -143,3 +143,34 @@ int exit_status(void) {
         printf("1..%d\n", nexttest - 1);
     return _exit_status;
 }
+
+static char *vstrdupf(const char *fmt, va_list args) {
+    char *str;
+    int size;
+    va_list args2;
+    va_copy(args2, args);
+    if (!fmt)
+        fmt = "";
+    size = vsnprintf(NULL, 0, fmt, args2) + 2;
+    str  = malloc(size);
+    if (!str) {
+        perror("malloc error");
+        exit(1);
+    }
+    vsprintf(str, fmt, args);
+    va_end(args2);
+    return str;
+}
+
+void tap_skip(int n, const char *fmt, ...) {
+    char *why;
+    va_list args;
+    va_start(args, fmt);
+    why = vstrdupf(fmt, args);
+    va_end(args);
+    while (n-- > 0) {
+        printf("ok %d ", nexttest++);
+        diag("skipped (%s)", why);
+    }
+    free(why);
+}
