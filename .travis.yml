@@ -1,9 +1,19 @@
 language: c
 
 dist: xenial
+os: linux
+
+install:
+  - gem install mdl
+  - pip install proselint --user
 
 script:
   - make clean
+  # build
   - make all
   - make examples
+  # test
   - make test
+  # lint
+  - mdl *.md
+  - proselint *.md
