@@ -1,4 +1,5 @@
-2019-03-17 22:11  0.3
+## 2019-03-17 22:11  0.3
+
   * Renamed:
       + tickit_timer_after_msec => tickit_watch_timer_after_msec
       + tickit_timer_after_tv   => tickit_watch_timer_after_tv
@@ -24,19 +25,20 @@
       + tickit_lookup_ctl(3)
       + tickit_ctltype(3)
   * TICKIT_PEN_UNDER type is now integer, supports single, double, wavy underline
-  * Fixed various example/demo-*.c files so they work again
+  * Fixed various example/demo-\*.c files so they work again
   * Added experimental new ability to provide event loop hooks for other event
     loops
-  * Deleted the deprecated tickit_string_* functions that were renamed to
-    tickit_utf8_*
-  * Renumbered TICKIT_PEN_* constants to start from 1; lists can end with 0
+  * Deleted the deprecated tickit_string_\* functions that were renamed to
+    tickit_utf8_\*
+  * Renumbered TICKIT_PEN_\* constants to start from 1; lists can end with 0
   * Use termios to know what backspace (VERASE) character is, rather than
     relying on terminfo - experience from vim, neovim, etc.. is that this is
     often more reliable
-  * tickit_watch_* callbacks now receive an info pointer, to match the calling
+  * tickit_watch_\* callbacks now receive an info pointer, to match the calling
     style of other object bindings
 
-2018-01-05 14:47  0.2
+## 2018-01-05 14:47  0.2
+
   * Added tickit_window_{is,set}_steal_focus(3)
   * Added entire toplevel Tickit instance
   * New bind_events API style - one event + flags, instead of bitmask
@@ -46,7 +48,7 @@
      + tickit_string_mbswidth => tickit_utf8_mbswidth
      + tickit_string_byte2col => tickit_utf8_byte2col
      + tickit_string_col2byte => tickit_utf8_col2byte
-     + tickit_string_count*   => tickit_utf8_count*
+     + tickit_string_count\*   => tickit_utf8_count\*
   * Added TickitString
   * Added tickit_rectset_get_rect(3)
   * Added tickit_renderbuffer_skiprect(3)
