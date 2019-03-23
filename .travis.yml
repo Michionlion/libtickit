@@ -25,6 +25,8 @@ script:
 - make examples
 # test
 - make test
+# install
+- sudo make install
 # lint
 - mdl *.md
 - proselint *.md
