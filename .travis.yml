@@ -19,7 +19,6 @@ install:
 - make -C libtermkey-0.22 all
 - sudo make -C libtermkey-0.22 install
 - export LD_LIBRARY_PATH=/usr/local/lib
-- find /usr/share/terminfo -type f
 
 cache: pip
 
