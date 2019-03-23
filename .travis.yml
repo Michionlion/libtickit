@@ -15,6 +15,10 @@ install:
 - gem install mdl
 - pip install proselint --user
 - source .travis-deps.sh
+
+cache: pip
+
+script:
 - ls -Rl $HOME/.terminfo
 - ls -Rl /etc/terminfo
 - ls -Rl /usr/share/terminfo
@@ -25,10 +29,6 @@ install:
 - infocmp screen
 - echo $TERMINFO_DIRS
 - echo $TERMINFO
-
-cache: pip
-
-script:
 - make clean
 # build
 - make all
