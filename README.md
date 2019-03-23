@@ -8,7 +8,7 @@ functions, and handles keyboard and mouse input events.
 
 ## Overview
 
-Using this library, applications can
+Using this library, applications can:
 
 * Divide the terminal into a hierarchy of nested, possibly overlapping
   rectangular windows
