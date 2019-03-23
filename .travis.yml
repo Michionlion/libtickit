@@ -1,0 +1,9 @@
+language: c
+
+dist: xenial
+
+script:
+  - make clean
+  - make all
+  - make examples
+  - make test
