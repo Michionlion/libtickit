@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    is_str(tickit_term_get_termtype(tt), "screen", "tickit_term_get_termtype");
+    is_str(tickit_term_get_termtype(tt), "screen3", "tickit_term_get_termtype");
 
     tickit_term_set_output_func(tt, output, buffer);
 
