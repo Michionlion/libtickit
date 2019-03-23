@@ -1,23 +1,21 @@
 language: c
+sudo: required
 
 dist: xenial
 os: linux
 
 addons:
   apt:
-    sources:
-    - sourceline: 'deb http://de.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse'
-    - sourceline: 'deb-src http://de.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse'
     packages:
     # - g++-7
     - libtool-bin
-    - libtermkey-dev
 
 install:
 - gem install mdl
 - pip install proselint --user -q
-- echo "Switching from $TERM to xterm"
-- export TERM="xterm"
+- wget http://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz
+- tar -xzvf libtermkey-0.22.tar.gz
+- sudo make -C libtermkey-0.22 install
 
 script:
 - make clean
