@@ -8,7 +8,7 @@ functions, and handles keyboard and mouse input events.
 
 Using this library, applications can
 
-* Divide the terminal into a hierarchy of nested, possibly-overlapping
+* Divide the terminal into a hierarchy of nested, possibly overlapping
   rectangular windows
 * Render output content and react to input events independently in any window
   region
@@ -31,18 +31,19 @@ The following terminal features are supported:
 
 \*: Not all terminals may support these features
 
-#### Project Management
+### Project Management
 
 The main project management site, containing bug lists, feature blueprints,
 roadmaps, and a mirror of the source code is found on Launchpad, at
 [launchpad.net/libtickit](https://launchpad.net/libtickit).
 
-#### Documentation
+### Documentation
 
-[Online versions](http://www.leonerd.org.uk/code/libtickit/doc/) of the manpages are available in HTML form.
+[Online versions](http://www.leonerd.org.uk/code/libtickit/doc/) of the
+manpages are available in HTML form.
 
-#### Source
+### Source
 
-The primary upstream revision control system lives in Bazaar at http://bazaar.leonerd.org.uk/c/libtickit.
+The primary upstream revision control system lives in [Bazaar](http://bazaar.leonerd.org.uk/c/libtickit).
 
 This is mirrored by the Launchpad project above.
