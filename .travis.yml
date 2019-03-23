@@ -12,7 +12,6 @@ addons:
 
 install:
 - gem install mdl
-- pip install --upgrade pip
 - pip install proselint --user
 - wget http://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz
 - tar -xzvf libtermkey-0.22.tar.gz
