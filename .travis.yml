@@ -12,11 +12,12 @@ addons:
     # - g++-7
     - libtool-bin
     - libtermkey-dev
-    update: true
 
 install:
 - gem install mdl
-- pip install proselint --user
+- pip install proselint --user -q
+- echo "Switching from $TERM to xterm"
+- export TERM="xterm"
 
 script:
 - make clean
