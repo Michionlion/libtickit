@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     char buffer[1024] = {0};
     int lines, cols;
 
-    tt = tickit_term_new_for_termtype("screen3");
+    tt = tickit_term_new_for_termtype("tmux");
     ok(!!tt, "tickit_term_new_for_termtype");
 
     if (!tt) {
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    is_str(tickit_term_get_termtype(tt), "screen3", "tickit_term_get_termtype");
+    is_str(tickit_term_get_termtype(tt), "tmux", "tickit_term_get_termtype");
 
     tickit_term_set_output_func(tt, output, buffer);
 
