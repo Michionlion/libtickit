@@ -9,7 +9,6 @@ addons:
     packages:
     # - g++-7
     - libtool-bin
-    - screen
 
 install:
 - gem install mdl
@@ -19,16 +18,6 @@ install:
 cache: pip
 
 script:
-- ls -Rl $HOME/.terminfo
-- ls -Rl /etc/terminfo
-- ls -Rl /usr/share/terminfo
-- find / -type d -name terminfo -print
-- infocmp6 -D
-- infocmp -D
-- infocmp xterm
-- infocmp screen
-- echo $TERMINFO_DIRS
-- echo $TERMINFO
 - make clean
 # build
 - make all
