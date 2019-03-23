@@ -521,8 +521,12 @@ static void gotkey_decrqss(struct XTermDriver *xd, const char *args, size_t argl
         args++, arglen--;
 
         // If the palette index is 2 then the terminal understands rgb8
+        // or if the COLORTERM environment variable contains "truecolor"
+        // or "24bit" (https://gist.github.com/XVilka/8346728)
         int value;
-        if (sscanf(args, "%d", &value) && value == 2)
+        const char *colorterm = getenv("COLORTERM");
+        if ((sscanf(args, "%d", &value) && value == 2) ||
+            (colorterm != NULL && (strstr(colorterm, "truecolor") || strstr(colorterm, "24bit"))))
             xd->cap.rgb8 = 1;
     }
 }
