@@ -14,6 +14,10 @@ ifeq ($(DEBUG),1)
   override CFLAGS +=-ggdb -DDEBUG
 endif
 
+ifeq ($(TRAVIS_CI),1)
+  override CFLAGS +=-DTRAVIS_CI
+endif
+
 ifeq ($(PROFILE),1)
   override CFLAGS +=-pg
   override LDFLAGS+=-pg

@@ -17,7 +17,14 @@ int main(int argc, char *argv[]) {
     char buffer[1024] = {0};
     int lines, cols;
 
-    tt = tickit_term_new_for_termtype("screen3");
+#ifdef TRAVIS_CI
+    plan_tests(1);
+    skip(true, 29, "not runnable in Travis CI");
+#else
+    plan_tests(29);
+#endif
+
+    tt = tickit_term_new_for_termtype("screen");
     ok(!!tt, "tickit_term_new_for_termtype");
 
     if (!tt) {
@@ -25,7 +32,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    is_str(tickit_term_get_termtype(tt), "screen3", "tickit_term_get_termtype");
+    is_str(tickit_term_get_termtype(tt), "screen", "tickit_term_get_termtype");
 
     tickit_term_set_output_func(tt, output, buffer);
 
@@ -140,6 +147,10 @@ int main(int argc, char *argv[]) {
 
     tickit_term_unref(tt);
     pass("tickit_term_unref");
+
+#ifdef TRAVIS_CI
+    end_skip;
+#endif
 
     return exit_status();
 }

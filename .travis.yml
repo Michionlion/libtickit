@@ -34,7 +34,7 @@ script:
 - make all
 - make examples
 # test
-- make test
+- make TRAVIS_CI=1 test
 # install
 - sudo make install
 # lint
