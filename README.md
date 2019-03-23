@@ -26,7 +26,7 @@ The following terminal features are supported:
 
 * Many rendering attributes; bold, italics\*, underline, reverse,
   strikethough\*, alternate font\*
-* 256 and 24-bit (16million) colours\*
+* 256 and 24-bit (16million) colors\*
 * Mouse including mouse wheel and recognition of position reporting greater
   than 224 columns\*
 * Arbitrary scrolling regions\*
