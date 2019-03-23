@@ -7,7 +7,9 @@
  * On most BSDs they come automatically
  * On other platforms - I have no idea... bug reports welcome :)
  */
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 
 #include "bindings.h"
 #include "termdriver.h"
