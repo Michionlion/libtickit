@@ -1,0 +1,105 @@
+.TH TICKIT 7
+.SH NAME
+tickit \- Terminal Interface Construction KIT
+.SH SYNOPSIS
+.EX
+.B #include <tickit.h>
+.sp
+.BI "typedef struct " Tickit ;
+.EE
+.sp
+.SH DESCRIPTION
+\fItickit\fP is a library for building full-screen interactive programs that use a terminal interface. A program using this library would start by creating a toplevel \fBTickit\fP instance, from which one or more divisions of the terminal area, called "windows" are created. These form a heirarchial tree that subdivides the content area into independent regions that can be managed by different parts of the program structure. Each window can react to input events such as keyboard or mouse interaction.
+.PP
+As well as creating the initial root window, the toplevel \fBTickit\fP instance also performs a few other jobs for the containing program. It can act as a containing event loop for the program, performing IO multiplexing tasks both for \fItickit\fP's own needs and the needs of the program as a whole.
+.SH FUNCTIONS
+A new toplevel instance is created by using \fBtickit_new_stdio\fP(3). A toplevel instance stores a reference count to make it easier for applications to manage its lifetime. A new toplevel instance starts with a count of one, and it can be adjusted using \fBtickit_ref\fP(3) and \fBtickit_unref\fP(3). When the count reaches zero the instance is destroyed.
+.PP
+The toplevel instance manages a tree of \fBTickitWindow\fP instances. The root of this tree is obtained by \fBtickit_get_rootwin\fP(3) and thereafter can be divided further by other functions on the window, described more in \fBtickit_window\fP(7).
+.PP
+The \fBTickitTerm\fP instance behind the toplevel instance can be obtained by \fBtickit_get_term\fP(3), and is described more in \fBtickit_term\fP(7).
+.PP
+Event handling callback functions can be installed to be called at a later time, by using \fBtickit_watch_timer_after_msec\fP(3), \fBtickit_watch_timer_after_tv\fP(3), or \fBtickit_watch_later\fP(3). The main IO event loop is controlled using \fBtickit_run\fP(3) and \fBtickit_stop\fP(3).
+.SH "TYPICAL STRUCTURE"
+A typical program using this library would start by creating the toplevel instance, by calling \fBtickit_new_stdio\fP(3), then obtain its root window on it by calling \fBtickit_get_rootwin\fP(3). This root window can then be sub-divided into regions of interest by calling \fBtickit_window_new\fP(3) to build a tree of windows. Window can then have some event handlers attached by calling \fBtickit_window_bind_event\fP(3) - each window will need to handle the \fBTICKIT_WINDOW_ON_EXPOSE\fP event, but might also wish to handle other kinds like geometry change for dynamic resizing, or keyboard or mouse to react to user input. Finally, once the intial window tree is created, the program would enter the main event loop by invoking \fBtickit_run\fP(3).
+.SH "COMMON TYPES"
+The \fIflags\fP argument to the various \fBtickit_..._bind_event\fP() functions should be zero, or a bitmask of the following constants.
+.sp
+.EX
+.B  typedef enum {
+.BR  "  TICKIT_BIND_FIRST" ,
+.BR  "  TICKIT_BIND_UNBIND" ,
+.BR  "  TICKIT_BIND_DESTROY" ,
+.BI "} " TickitBindFlags ;
+.EE
+.sp
+.PP
+\fBTICKIT_BIND_FIRST\fP indicates that this handler should be inserted at the start of the list, rather than the default position at the end.
+.PP
+\fBTICKIT_BIND_UNBIND\fP indicates that this handler should also be invoked at the time it is unbound, either due to a specific call to the \fBtickit_..._unbind_event\fP() function, or because the bound object is being destroyed.
+.PP
+\fBTICKIT_BIND_DESTROY\fP indicates that this handler should also be invoked at the time that the bound object is being destroyed.
+.PP
+Some API functions take or return the following enum type, to represent a tri-state extended boolean concept of true, false, or some third condition typically indicating a "don't care" or "unknown" state; the exact semantics will vary between specific uses and should be documented specifically.
+.sp
+.EX
+.B  typedef enum {
+.BR "  TICKIT_YES" " = 1,"
+.BR "  TICKIT_NO" " = 0,"
+.BR "  TICKIT_MAYBE" " = -1",
+.BI "} " TickitMaybeBool ;
+.EE
+.PP
+The various \fBtickit_*_ctltype\fP() and \fBtickit_pen_attrtype\fP(3) functions return the following enum type, to indicate what type of value each individual control or attribute takes.
+.sp
+.EX
+.B  typedef enum {
+.BR "  TICKIT_TYPE_NONE" ,
+.BR "  TICKIT_TYPE_BOOL" ,
+.BR "  TICKIT_TYPE_INT" ,
+.BR "  TICKIT_TYPE_COLOUR" ,
+.BI "} " TickitType ;
+.EE
+.SH "COMMON EVENTS"
+Every object instance that supports events supports the following type of event, in addition to the specific ones listed for that kind of object:
+.TP
+.B TICKIT_..._ON_DESTROY
+Invoked when the object instance is being destroyed. This will be the last time the application can use the stored \fIdata\fP argument; it may perform any resource reclaiming operations that are required at this time.
+.SH "EVENT FLAGS"
+When an event handler function is invoked, it is passed a bitmask of flags to indicate the reason for its invocation.
+.sp
+.EX
+.B  typedef enum {
+.BR "  TICKIT_EV_FIRE" ,
+.BR "  TICKIT_EV_UNBIND" ,
+.BR "  TICKIT_EV_DESTROY" ,
+.BI "} " TickitEventFlags ;
+.EE
+.TP
+.B TICKIT_EV_FIRE
+This handler is being invoked because its associated event has occurred. The \fIinfo\fP pointer will point to a structure containing the relevant information.
+.TP
+.B TICKIT_EV_UNBIND
+This handler is being invoked because it is being removed from the object. This will only be observed if it was bound with the \fBTICKIT_BIND_UNBIND\fP flag. The \fIinfo\fP pointer will be \fBNULL\fP.
+.TP
+.B TICKIT_EV_DESTROY
+This handler is being invoked because the object instance itself is being destroyed. This will be observed if it was bound with the \fBTICKIT_BIND_DESTROY\fP flag, or because it is bound to the \fBTICKIT_..._ON_DESTROY\fP event. The \fIinfo\fP pointer will be \fBNULL\fP.
+.IP
+Any event handlers for this event will be invoked in reverse order; the newest is run first and the oldest last.
+.SH CONTROLS
+A toplevel instance has a number of runtime-configuration control options that affect its behaviour. These can be set using \fBtickit_setctl_int\fP(3), and queried using \fBtickit_getctl_int\fP(3). The individual controls have human-readable string names that can be obtained by \fBtickit_ctlname\fP(3) and searched by name using \fBtickit_lookup_ctl\fP(3). The type of a control option can be queried using \fBtickit_ctltype\fP(3).
+.PP
+The options are given in an enumeration called \fBTickitCtl\fP. The following control values are recognised:
+.in
+.TP
+.B TICKIT_CTL_USE_ALTSCREEN (bool)
+The value is a boolean indicating whether the instance will activate the terminal alternate screen buffer mode when started.
+.SH "SEE ALSO"
+.BR tickit_window (7),
+.BR tickit_term (7),
+.BR tickit_pen (7),
+.BR tickit_rect (7),
+.BR tickit_rectset (7),
+.BR tickit_renderbuffer (7),
+.BR tickit_string (7),
+.BR tickit_utf8_count (3)

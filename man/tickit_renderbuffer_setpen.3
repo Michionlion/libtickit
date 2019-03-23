@@ -1,0 +1,24 @@
+.TH TICKIT_RENDERBUFFER_SETPEN 3
+.SH NAME
+tickit_renderbuffer_setpen \- change the stored rendering pen
+.SH SYNOPSIS
+.EX
+.B #include <tickit.h>
+.sp
+.BI "void tickit_renderbuffer_setpen(TickitRenderBuffer *" rb ", const TickitPen *" pen );
+.EE
+.sp
+Link with \fI\-ltickit\fP.
+.SH DESCRIPTION
+\fBtickit_renderbuffer_setpen\fP() changes the attributes of the stored pen in the buffer to those in the given \fBTickitPen\fP() instance, removing any that are not present in \fIpen\fP. The instance passed in the \fIpen\fP argument is not stored by the render buffer, nor is it modified by it.
+.PP
+If there is a stored pen in the previous stack level, then the attributes in that pen will be merged into the current one, before the passed one is applied. In effect, the actual pen used by drawing functions is merged from the pen argument passed to \fBtickit_renderbuffer_setpen\fP(), and the combined stored pen from the previous stack level (which was itself merged from the pen argument and the stored pen of the stack level below that, and so on).
+.SH "RETURN VALUE"
+This function returns nothing.
+.SH "SEE ALSO"
+.BR tickit_renderbuffer_new (3),
+.BR tickit_renderbuffer_text (3),
+.BR tickit_renderbuffer_save (3),
+.BR tickit_renderbuffer (7),
+.BR tickit_pen (7),
+.BR tickit (7)

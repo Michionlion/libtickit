@@ -1,0 +1,186 @@
+.TH TICKIT_TERM 7
+.SH NAME
+TickitTerm \- abstraction of an interactive terminal
+.SH SYNOPSIS
+.EX
+.B #include <tickit.h>
+.sp
+.BI "typedef struct " TickitTerm ;
+.EE
+.sp
+.SH DESCRIPTION
+A \fBTickitTerm\fP instance represents an interactive user terminal. It provides functions to draw content to the terminal, and to accept input and other events from it. It supports a variety of modes of operation; allowing both synchronous and asynchronous filehandle IO, and working abstractly via byte buffers.
+.SH FUNCTIONS
+A new \fBTickitTerm\fP instance is created using the \fBtickit_term_new\fP(3) or \fBtickit_term_new_for_termtype\fP(3) functions. A terminal instance stores a reference count to make it easier for applications to manage the lifetime of terminals. A new terminal starts with reference count of one, and it can be adjusted using \fBtickit_term_ref\fP(3) and \fBtickit_term_unref\fP(3). When the count reaches zero the instance is destroyed.
+.PP
+The \fBtickit_term_open_stdio\fP(3) function offers a convenient shortcut to creating a new instance set up to represent the standard input and output streams of the process.
+.PP
+A terminal instance will need either an output function or an output filehandle set before it can send output. This can be performed by either \fBtickit_term_set_output_func\fP(3) or \fBtickit_term_set_output_fd\fP(3). An output buffer can be defined by \fBtickit_term_set_output_buffer\fP(3). If output is via a filehandle, then the size of that will be queried if it is a
+.SM TTY.
+If output is via an output function only then the size must be set using \fBtickit_term_set_size\fP(3). An input filehandle can be set using \fBtickit_term_set_input_fd\fP(3), or input can be sent from a byte buffer using \fBtickit_term_input_push_bytes\fP(3). Once input and output methods are set the terminal startup actions are performed, and the \fBtickit_term_await_started_msec\fP(3) function can be used to wait until this is complete. A running instance can be paused using \fBtickit_term_pause\fP(3) and resumed using \fBtickit_term_resume\fP(3).
+.PP
+It supports
+.SM UTF-8
+if enabled; either by detection of a
+.SM UTF-8
+locale, explicitly by calling \fBtickit_term_set_utf8\fP(3).
+.PP
+The size of the terminal can be queried using \fBtickit_term_get_size\fP(3), or forced to a given size by \fBtickit_term_set_size\fP(3). If the application is aware that the size of a terminal represented by a \fBtty\fP(7) filehandle has changed (for example due to receipt of a \fBSIGWINCH\fP signal), it can call \fBtickit_term_refresh_size\fP(3) to update it. The type of the terminal is set at construction time but can be queried later using \fBtickit_term_get_termtype\fP(3).
+.SH OUTPUT
+Once an output method is defined, a terminal instance can be used for outputting drawing and other commands. For drawing, the functions \fBtickit_term_print\fP(3), \fBtickit_term_goto\fP(3), \fBtickit_term_move\fP(3), \fBtickit_term_scrollrect\fP(3), \fBtickit_term_chpen\fP(3), \fBtickit_term_setpen\fP(3), \fBtickit_term_clear\fP(3) and \fBtickit_term_erasech\fP(3) can be used. Additionally for setting modes, the function \fBtickit_term_setctl_int\fP(3) can be used. If an output buffer is defined it will need to be flushed when drawing is complete by calling \fBtickit_term_flush\fP(3).
+.SH INPUT
+Input via a filehandle can be received either synchronously by calling \fBtickit_term_input_wait_msec\fP(3), or asynchronously by calling \fBtickit_term_input_readable\fP(3) and \fBtickit_term_input_check_timeout_msec\fP(3). Any of these functions may cause one or more events to be raised by invoking event handler functions.
+.SH EVENTS
+A terminal instance stores a list of event handlers. Each event handler is associated with one event type and stores a function pointer, and an arbitrary pointer containing user data. Event handlers may be installed using \fBtickit_term_bind_event\fP(3) and removed using \fBtickit_term_unbind_event_id\fP(3).
+.PP
+Fake events can be artificially injected into the event handler chain, as if they had been received from the controlling terminal, by \fBtickit_term_emit_key\fP(3) and \fBtickit_term_emit_mouse\fP(3). These may be useful for testing, event capture-and-replay, or other specialised cases.
+.PP
+The event types recognised are:
+.TP
+.B TICKIT_TERM_ON_DESTROY
+The terminal instance is being destroyed.
+.TP
+.B TICKIT_TERM_ON_RESIZE
+The terminal has been resized. \fIinfo\fP will point to a structure defined as:
+.sp
+.EX
+.B  typedef struct {
+.BI "    int " lines ;
+.BI "    int " cols ;
+.BI "} " TickitResizeEventInfo ;
+.EE
+.TP
+.B TICKIT_TERM_ON_KEY
+A key has been pressed on the keyboard. \fIinfo\fP will point to a structure defined as:
+.sp
+.EX
+.B  typedef struct {
+.BI "    TickitKeyEventType " type ;
+.BI "    int " mod ;
+.BI "    const char *" str ;
+.BI "} " TickitKeyEventInfo ;
+.EE
+.IP
+\fItype\fP is an enumeration that gives the specific type of key event.
+.RS
+.TP
+.B TICKIT_KEYEV_KEY
+a cursor control, arrow key, or function key. i.e. any of the keys that don't directly produce text.
+.TP
+.B TICKIT_KEYEV_TEXT
+regular Unicode characters.
+.RE
+.sp
+\fIstr\fP will contain the name of the special key, including any applied modifiers, or a
+.SM UTF-8
+string of the Unicode character.
+.sp
+\fImod\fP will contain a bitmask of \fBTICKIT_MOD_SHIFT\fP, \fBTICKIT_MOD_ALT\fP and \fBTICKIT_MOD_CTRL\fP.
+.sp
+This event only runs until a bound function returns a true value; this prevents
+later handler functions from observing it.
+.TP
+.B TICKIT_TERM_ON_MOUSE
+A mouse button has been pressed or released, the mouse cursor moved while dragging a button, or the wheel has been scrolled. \fIinfo\fP will point to a structure defined as:
+.sp
+.EX
+.B  typedef struct {
+.BI "    TickitMouseEventType " type ;
+.BI "    int " button ;
+.BI "    int " mod ;
+.BI "    int " line ;
+.BI "    int " col ;
+.BI "} " TickitMouseEventInfo ;
+.EE
+.IP
+\fItype\fP is an enumeration that gives the specific type of mouse event.
+.RS
+.TP
+.B TICKIT_MOUSEEV_PRESS
+A mouse button has been pressed.
+.TP
+.B TICKIT_MOUSEEV_DRAG
+The mouse has been moved while a button is being held down.
+.TP 
+.B TICKIT_MOUSEEV_RELEASE
+A mouse button has been released.
+.TP
+.B TICKIT_MOUSEEV_WHEEL
+The wheel has been rolled.
+.RE
+.sp
+\fIbutton\fP gives the button index for button events, or one of \fBTICKIT_MOUSEWHEEL_UP\fP or \fBTICKIT_MOUSEWHEEL_DOWN\fP for wheel events.
+.sp
+\fIline\fP and \fIcol\fP give the position of the mouse cursor for this event.
+.sp
+\fImod\fP will contain a bitmask of \fBTICKIT_MOD_SHIFT\fP, \fBTICKIT_MOD_ALT\fP and \fBTICKIT_MOD_CTRL\fP.
+.sp
+This event only runs until a bound function returns a true value; this prevents
+later handler functions from observing it.
+.SH CONTROLS
+A terminal instance has a number of runtime-configuration control options that affect its behaviour. These can be set using \fBtickit_term_setctl_int\fP(3) and \fBtickit_term_setctl_str\fP(3), and queried using \fBtickit_term_getctl_int\fP(3). The individual controls have human-readable string names that can be obtained by \fBtickit_term_ctlname\fP(3) and searched by name using \fBtickit_term_lookup_ctl\fP(3). The type of a control option can be queried using \fBtickit_term_ctltype\fP(3).
+.PP
+The options are given in an enumeration called \fBTickitTermCtl\fP. The following control values are recognised:
+.in
+.TP
+.B TICKIT_TERMCTL_ALTSCREEN (bool)
+The value is a boolean indicating whether the terminal alternate buffer mode should be enabled. When enabled, a temporary buffer is used for drawing, preserving the original contents of the screen. This mode is usually used by full-screen applications to preserve the shell's scrollback state.
+.TP
+.B TICKIT_TERMCTL_COLORS (int, read-only)
+The value indicates how many colors are available. This value is read-only; it can be requested but not set.
+.TP
+.B TICKIT_TERMCTL_CURSORBLINK (bool)
+The value is a boolean indicating whether the terminal text cursor should blink. When disabled, the cursor will appear in a steady state, if visible. When enabled, the cursor will appear blinking, if visible. If the cursor is invisible, this should not have any effect.
+.TP
+.B TICKIT_TERMCTL_CURSORSHAPE (int)
+The value is an integer from the \fBTickitCursorShape\fP enumeration indicating what shape the terminal's text cursor should be. Values are:
+.RS
+.TP
+.B TICKIT_CURSORSHAPE_BLOCK
+A solid block filling the entire cell.
+.TP
+.B TICKIT_CURSORSHAPE_UNDER
+An underline below the character.
+.TP
+.B TICKIT_CURSORSHAPE_LEFT_BAR
+A vertical bar to the left of the character.
+.RE
+.IP
+Note that not all terminals support setting this option, nor to all of the possible values.
+.TP
+.B TICKIT_TERMCTL_CURSORVIS (bool)
+The value is a boolean indicating whether the terminal text cursor should be visible. When disabled the cursor position is not visible. Typically applications will hide the cursor while performing redrawing operations so as not to show a flickering effect as the cursor moves, and show it again when drawing is complete.
+.TP
+.B TICKIT_TERMCTL_ICON_TEXT (str)
+The value is a string for the terminal to use as its minimised icon text.
+.TP
+.B TICKIT_TERMCTL_ICONTITLE_TEXT (str)
+The value is a string for the terminal to use as its minimised icon text and main window title.
+.TP
+.B TICKIT_TERMCTL_KEYPAD_APP (bool)
+The value is a boolean controlling the terminal's keypad mode. When enabled, the terminal is in keypad application mode; in this mode the numerical keypad will send different sequences that can be detected as distinct from regular
+.SM ASCII
+text. When disabled, the keypad will send normal text.
+.TP
+.B TICKIT_TERMCTL_MOUSE (int)
+The value is an integer from the \fBTickitTermMouseMode\fP enumeration indicating what mouse events should be sent. Values are:
+.RS
+.TP
+.B BTICKIT_TERM_MOUSEMODE_CLICK
+Report button press and release events.
+.TP
+.B TICKIT_TERM_MOUSEMODE_DRAG
+Report button press and release events, and movement while a button is held.
+.TP
+.B TICKIT_TERM_MOUSEMODE_MOVE
+Report all button press, release and motion events even with no buttons held.
+.TP
+.B TICKIT_TERM_MOUSEMODE_OFF
+Report nothing.
+.RE
+.TP
+.B TICKIT_TERMCTL_TITLE_TEXT (str)
+The value is a string for the terminal to use as its main window title.
+.SH "SEE ALSO"
+.BR tickit (7),
+.BR tickit_renderbuffer (7)

@@ -1,0 +1,41 @@
+.TH TICKIT_RENDERBUFFER_TEXT 3
+.SH NAME
+tickit_renderbuffer_text, tickit_renderbuffer_text_at \- create text regions
+.SH SYNOPSIS
+.EX
+.B #include <tickit.h>
+.sp
+.BI "int tickit_renderbuffer_text(TickitRenderBuffer *" rb ,
+.BI "        const char *" text );
+.BI "int tickit_renderbuffer_textn(TickitRenderBuffer *" rb ,
+.BI "        const char *" text ", size_t " len );
+.BI "int tickit_renderbuffer_textf(TickitRenderBuffer *" rb ,
+.BI "        const char *" fmt ", ...);"
+.BI "int tickit_renderbuffer_vtextf(TickitRenderBuffer *" rb ,
+.BI "        const char *" fmt ", va_list " args );
+.sp
+.BI "int tickit_renderbuffer_text_at(TickitRenderBuffer *" rb ,
+.BI "        int " line ", int " col ", const char *" text );
+.BI "int tickit_renderbuffer_textn_at(TickitRenderBuffer *" rb ,
+.BI "        int " line ", int " col ", const char *" text ", size_t " len );
+.BI "int tickit_renderbuffer_textf_at(TickitRenderBuffer *" rb ,
+.BI "        int " line ", int " col ", const char *" fmt ", ...);"
+.BI "int tickit_renderbuffer_vtextf_at(TickitRenderBuffer *" rb ,
+.BI "        int " line ", int " col ", const char *" fmt ", va_list " args );
+.EE
+.sp
+Link with \fI\-ltickit\fP.
+.SH DESCRIPTION
+\fBtickit_renderbuffer_text\fP() creates a text region that starts at the current virtual cursor position, containing the given text string and set to the current pen. \fBtickit_renderbuffer_textn\fP() creates a text region of at most \fIlen\fP bytes. It returns the number of columns that the text string occupies.  \fBtickit_renderbuffer_textf\fP() and \fBtickit_renderbuffer_vtextf\fP() take a format string in the style of \fBsprintf\fP(3) to create formatted text from either a list of arguments or a \fIva_list\fP. These functions will update the virtual cursor position.
+.PP
+\fBtickit_renderbuffer_text_at\fP(), \fBtickit_renderbuffer_textn_at\fP(), \fBtickit_renderbuffer_textf_at\fP() and \fBtickit_renderbuffer_vtextf_at\fP() create a text region at the given position, and otherwise operate analogously to their non-\fB_at\fP counterpart. These functions do not use or update the virtual cursor position.
+.PP
+Calls to any of these functions allocate storage owned by the \fITickitRenderBuffer\fP instance itself to store the strings. This storage is released again by \fBtickit_renderbuffer_reset\fP(3), the implicit reset that happens at the end of \fBtickit_renderbuffer_flush_to_term\fP(3), or when every cell that was originally part of the region has been overwritten with other content.
+.SH "RETURN VALUE"
+These functions return an integer giving the number of columns the new region occupies.
+.SH "SEE ALSO"
+.BR tickit_renderbuffer_new (3),
+.BR tickit_renderbuffer_blit (3),
+.BR tickit_renderbuffer_flush_to_term (3),
+.BR tickit_renderbuffer (7),
+.BR tickit (7)

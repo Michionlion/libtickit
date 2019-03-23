@@ -1,0 +1,31 @@
+.TH TICKIT_TERM_PRINT 3
+.SH NAME
+tickit_term_print \- send text to the terminal
+.SH SYNOPSIS
+.EX
+.B #include <tickit.h>
+.sp
+.BI "void tickit_term_print(TickitTerm *" tt ", const char *" str );
+.BI "void tickit_term_printn(TickitTerm *" tt ", const char *" str ", size_t " len );
+.sp
+.BI "void tickit_term_printf(TickitTerm *" tt ", const char *" fmt ", ...);"
+.BI "void tickit_term_vprintf(TickitTerm *" tt ", const char *" fmt ", va_list " args );
+.EE
+.sp
+Link with \fI\-ltickit\fP.
+.SH DESCRIPTION
+\fBtickit_term_print\fP() sends a string of text to the terminal to be printed at the current cursor location. The string must be free from any control characters.  \fBtickit_term_printn\fP() sends a string at most \fIlen\fP characters to be printed.
+.PP
+\fBtickit_term_printf\fP() sends a string of text built by formatting the given arguments in the same way that \fBprintf\fP(3) does. \fBtickit_term_vprintf\fP() is similar, taking its arguments instead in a \fBva_list\fP as \fBvprintf\fP(3) does.
+.SH "RETURN VALUE"
+\fBtickit_term_print\fP(), \fBtickit_term_printf\fP() and \fBtickit_term_vprintf\fP() return no value.
+.SH "SEE ALSO"
+.BR tickit_term_new (3),
+.BR tickit_term_set_output_fd (3),
+.BR tickit_term_set_output_func (3),
+.BR tickit_term_goto (3),
+.BR tickit_term_setpen (3),
+.BR tickit_term_chpen (3),
+.BR tickit_term_erasech (3)
+.BR tickit_term (7),
+.BR tickit (7)

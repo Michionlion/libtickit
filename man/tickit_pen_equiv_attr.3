@@ -1,0 +1,27 @@
+.TH TICKIT_PEN_EQUIV_ATTR 3
+.SH NAME
+tickit_pen_equiv_attr \- test if two pens have an equivalent attribute value
+.SH SYNOPSIS
+.EX
+.B #include <tickit.h>
+.sp
+.BI "bool tickit_pen_equiv_attr(TickitPen *" a ", TickitPen *" b ,
+.BI "    TickitPenAttr " attr );
+.BI "bool tickit_pen_equiv(TickitPen *" a ", TickitPen *" b )
+.EE
+.sp
+Link with \fI\-ltickit\fP.
+.SH DESCRIPTION
+\fBtickit_pen_equiv_attr\fP() tests whether two given pen instances have equivalent values for given attribute. It returns true if neither pen has the attribute defined, or if both have it defined to the same value.
+.PP
+\fBtickit_pen_equiv\fP() tests whether two given pen instances have equivalent values for all attributes.
+.SH "RETURN VALUE"
+\fBtickit_pen_equiv_attr\fP() and \fBtickit_pen_equiv\fP() return a boolean.
+.SH "SEE ALSO"
+.BR tickit_pen_new (3),
+.BR tickit_pen_set_bool_attr (3),
+.BR tickit_pen_set_int_attr (3),
+.BR tickit_pen_set_colour_attr (3),
+.BR tickit_pen_clear_attr (3),
+.BR tickit_pen (7),
+.BR tickit (7)
