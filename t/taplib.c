@@ -169,8 +169,8 @@ void tap_skip(int n, const char *fmt, ...) {
     why = vstrdupf(fmt, args);
     va_end(args);
     while (n-- > 0) {
-        printf("ok %d ", nexttest++);
-        diag("skipped (%s)", why);
+        printf("ok %d ", ++nexttest - 1);
     }
+    diag("skipped %d tests (%s)", nexttest - 1, why);
     free(why);
 }
