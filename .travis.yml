@@ -15,6 +15,16 @@ install:
 - gem install mdl
 - pip install proselint --user
 - source .travis-deps.sh
+- ls -Rl $HOME/.terminfo
+- ls -Rl /etc/terminfo
+- ls -Rl /usr/share/terminfo
+- find / -type d -name terminfo -print
+- infocmp6 -D
+- infocmp -D
+- infocmp xterm
+- infocmp screen
+- echo $TERMINFO_DIRS
+- echo $TERMINFO
 
 cache: pip
 
