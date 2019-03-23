@@ -27,7 +27,7 @@ script:
 - make all
 - make examples
 # test
-- LD_LIBRARY_PATH=/usr/local/lib make test
+- make test
 # lint
 - mdl *.md
 - proselint *.md
