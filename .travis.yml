@@ -9,7 +9,8 @@ addons:
       # - ubuntu-toolchain-r-test
     packages:
       # - g++-7
-      - libtool
+      - automake
+      - autoconf
       - libtermkey-dev
 
 install:
