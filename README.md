@@ -1,6 +1,6 @@
 # libtickit: Terminal Interface Construction Kit
 
-![build status](https://travis-ci.com/Michionlion/libtickit.svg?branch=master)
+[![Build Status](https://travis-ci.com/Michionlion/libtickit.svg?branch=master)](https://travis-ci.com/Michionlion/libtickit)
 
 This library provides an abstracted mechanism for building interactive
 full-screen terminal programs. It provides a full set of output drawing
