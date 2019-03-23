@@ -17,8 +17,7 @@ install:
 - wget http://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz
 - tar -xzvf libtermkey-0.22.tar.gz
 - make -C libtermkey-0.22 all
-- sudo make -C libtermkey-0.22 install
-- export LD_LIBRARY_PATH=/usr/local/lib
+- sudo make -C libtermkey-0.22 PREFIX=/usr install
 
 cache: pip
 
