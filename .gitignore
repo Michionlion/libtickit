@@ -1,10 +1,18 @@
-# require force-adding from examples to drop any extras
-/examples
-
 .libs/
+
+error.log
 
 *.o
 *.lo
 *.la
 *.a
 *.so
+
+/examples/demo
+/examples/demo-pen
+/examples/demo-rgb8
+/examples/demo-scroll
+/examples/demo-termctl
+/examples/demo-xterm256
+/examples/evloop-glib
+/examples/evloop-libuv
