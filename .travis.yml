@@ -12,13 +12,14 @@ addons:
 
 install:
 - gem install mdl
-- pip install proselint --user -q
+- pip install --upgrade pip
+- pip install proselint --user
 - wget http://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz
 - tar -xzvf libtermkey-0.22.tar.gz
 - make -C libtermkey-0.22 all
 - sudo make -C libtermkey-0.22 install
-- ls -l /usr/local/lib
-- ls -l /usr/local/include
+
+cache: pip
 
 script:
 - make clean
