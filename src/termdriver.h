@@ -1,13 +1,13 @@
-#include "tickit.h"
 #include "tickit-termdrv.h"
+#include "tickit.h"
 
 typedef struct {
-  const char *termtype;
-  const struct TickitTerminfoHook *ti_hook;
+    const char *termtype;
+    const struct TickitTerminfoHook *ti_hook;
 } TickitTermProbeArgs;
 
 typedef struct {
-  TickitTermDriver *(*new)(const TickitTermProbeArgs *args);
+    TickitTermDriver *(*new)(const TickitTermProbeArgs *args);
 } TickitTermDriverProbe;
 
 extern TickitTermDriverProbe tickit_termdrv_probe_xterm;
