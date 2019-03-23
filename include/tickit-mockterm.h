@@ -13,20 +13,19 @@ extern "C" {
 
 #include "tickit.h"
 
-typedef struct
-{
-  enum {
-    LOG_GOTO = 1,
-    LOG_PRINT,
-    LOG_ERASECH,
-    LOG_CLEAR,
-    LOG_SCROLLRECT,
-    LOG_SETPEN,
-  } type;
-  int val1, val2;  // GOTO(line, col); ERASECH(count, moveend); SCROLLRECT(downward,rightward)
-  const char *str; // PRINT
-  TickitRect rect; // SCROLLRECT
-  TickitPen *pen;  // SETPEN
+typedef struct {
+    enum {
+        LOG_GOTO = 1,
+        LOG_PRINT,
+        LOG_ERASECH,
+        LOG_CLEAR,
+        LOG_SCROLLRECT,
+        LOG_SETPEN,
+    } type;
+    int val1, val2;   // GOTO(line, col); ERASECH(count, moveend); SCROLLRECT(downward,rightward)
+    const char *str;  // PRINT
+    TickitRect rect;  // SCROLLRECT
+    TickitPen *pen;   // SETPEN
 } TickitMockTermLogEntry;
 
 /* A TickitMockTerm really is a TickitTerm */
@@ -37,7 +36,8 @@ void tickit_mockterm_destroy(TickitMockTerm *mt);
 
 void tickit_mockterm_resize(TickitMockTerm *mt, int newlines, int newcols);
 
-size_t tickit_mockterm_get_display_text(TickitMockTerm *mt, char *buffer, size_t len, int line, int col, int width);
+size_t tickit_mockterm_get_display_text(
+    TickitMockTerm *mt, char *buffer, size_t len, int line, int col, int width);
 TickitPen *tickit_mockterm_get_display_pen(TickitMockTerm *mt, int line, int col);
 
 int tickit_mockterm_loglen(TickitMockTerm *mt);

@@ -11,35 +11,35 @@ extern "C" {
  * guarantees at this time.
  */
 
-#include "tickit.h"
 #include <termkey.h>
+#include "tickit.h"
 
 typedef struct TickitTermDriver TickitTermDriver;
 
 typedef struct {
-  void (*attach)(TickitTermDriver *ttd, TickitTerm *tt); /* optional */
-  void (*destroy)(TickitTermDriver *ttd);
-  void (*start)(TickitTermDriver *ttd); /* optional */
-  bool (*started)(TickitTermDriver *ttd); /* optional */
-  void (*stop)(TickitTermDriver *ttd); /* optional */
-  void (*pause)(TickitTermDriver *ttd); /* optional */
-  void (*resume)(TickitTermDriver *ttd); /* optional */
-  bool (*print)(TickitTermDriver *ttd, const char *str, size_t len);
-  bool (*goto_abs)(TickitTermDriver *ttd, int line, int col);
-  bool (*move_rel)(TickitTermDriver *ttd, int downward, int rightward);
-  bool (*scrollrect)(TickitTermDriver *ttd, const TickitRect *rect, int downward, int rightward);
-  bool (*erasech)(TickitTermDriver *ttd, int count, TickitMaybeBool moveend);
-  bool (*clear)(TickitTermDriver *ttd);
-  bool (*chpen)(TickitTermDriver *ttd, const TickitPen *delta, const TickitPen *final);
-  bool (*getctl_int)(TickitTermDriver *ttd, TickitTermCtl ctl, int *value);
-  bool (*setctl_int)(TickitTermDriver *ttd, TickitTermCtl ctl, int value);
-  bool (*setctl_str)(TickitTermDriver *ttd, TickitTermCtl ctl, const char *value);
-  int  (*gotkey)(TickitTermDriver *ttd, TermKey *tk, const TermKeyKey *key); /* optional */
+    void (*attach)(TickitTermDriver *ttd, TickitTerm *tt); /* optional */
+    void (*destroy)(TickitTermDriver *ttd);
+    void (*start)(TickitTermDriver *ttd);   /* optional */
+    bool (*started)(TickitTermDriver *ttd); /* optional */
+    void (*stop)(TickitTermDriver *ttd);    /* optional */
+    void (*pause)(TickitTermDriver *ttd);   /* optional */
+    void (*resume)(TickitTermDriver *ttd);  /* optional */
+    bool (*print)(TickitTermDriver *ttd, const char *str, size_t len);
+    bool (*goto_abs)(TickitTermDriver *ttd, int line, int col);
+    bool (*move_rel)(TickitTermDriver *ttd, int downward, int rightward);
+    bool (*scrollrect)(TickitTermDriver *ttd, const TickitRect *rect, int downward, int rightward);
+    bool (*erasech)(TickitTermDriver *ttd, int count, TickitMaybeBool moveend);
+    bool (*clear)(TickitTermDriver *ttd);
+    bool (*chpen)(TickitTermDriver *ttd, const TickitPen *delta, const TickitPen *final);
+    bool (*getctl_int)(TickitTermDriver *ttd, TickitTermCtl ctl, int *value);
+    bool (*setctl_int)(TickitTermDriver *ttd, TickitTermCtl ctl, int value);
+    bool (*setctl_str)(TickitTermDriver *ttd, TickitTermCtl ctl, const char *value);
+    int (*gotkey)(TickitTermDriver *ttd, TermKey *tk, const TermKeyKey *key); /* optional */
 } TickitTermDriverVTable;
 
 struct TickitTermDriver {
-  TickitTerm *tt;
-  TickitTermDriverVTable *vtable;
+    TickitTerm *tt;
+    TickitTermDriverVTable *vtable;
 };
 
 void *tickit_termdrv_get_tmpbuffer(TickitTermDriver *ttd, size_t len);
