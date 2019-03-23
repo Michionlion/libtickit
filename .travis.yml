@@ -10,6 +10,7 @@ addons:
     packages:
       # - g++-7
       - libtool
+      - libtermkey-dev
 
 install:
   - gem install mdl
