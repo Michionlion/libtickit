@@ -5,26 +5,25 @@ os: linux
 
 addons:
   apt:
-    # sources:
-      # - ubuntu-toolchain-r-test
+    sources:
+    - sourceline: 'deb http://de.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse'
+    - sourceline: 'deb-sec http://de.archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse'
     packages:
-      # - g++-7
-      - automake
-      - autoconf
-      - libtool-bin
-      - libtermkey-dev
+    # - g++-7
+    - libtool-bin
+    - libtermkey-dev
 
 install:
-  - gem install mdl
-  - pip install proselint --user
+- gem install mdl
+- pip install proselint --user
 
 script:
-  - make clean
-  # build
-  - make all
-  - make examples
-  # test
-  - make test
-  # lint
-  - mdl *.md
-  - proselint *.md
+- make clean
+# build
+- make all
+- make examples
+# test
+- make test
+# lint
+- mdl *.md
+- proselint *.md
