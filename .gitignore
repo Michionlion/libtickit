@@ -1,0 +1,10 @@
+# require force-adding from examples to drop any extras
+/examples
+
+.libs/
+
+*.o
+*.lo
+*.la
+*.a
+*.so
