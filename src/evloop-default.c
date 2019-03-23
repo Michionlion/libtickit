@@ -1,9 +1,9 @@
-#include "tickit-evloop.h"
 #include "tickit.h"
 
 #include <errno.h>
 #include <poll.h>
 #include <signal.h>
+#include "tickit-evloop.h"
 
 typedef struct {
     Tickit *t;
