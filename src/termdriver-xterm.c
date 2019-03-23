@@ -610,40 +610,9 @@ static TickitTermDriverVTable xterm_vtable = {
 static TickitTermDriver *new (const TickitTermProbeArgs *args) {
     const char *termtype = args->termtype;
 
-    // added based on popular entries from
-    // https://gist.github.com/XVilka/8346728
-    // they may not end up being the actual termtype string,
-    // but hopefully will provide something at least
-    // clang-format off
-    if (
-        // straight $TERM comparison
-        strncmp(termtype, "xterm", 5)       != 0 ||
-        strncmp(termtype, "st", 2)          != 0 ||
-        strncmp(termtype, "xst", 3)         != 0 ||
-        strncmp(termtype, "pangoterm", 9)   != 0 ||
-        strncmp(termtype, "termux", 6)      != 0 ||
-        strncmp(termtype, "konsole", 7)     != 0 ||
-        strncmp(termtype, "hterm", 5)       != 0 ||
-        strncmp(termtype, "kitty", 5)       != 0 ||
-        strncmp(termtype, "iterm", 5)       != 0 ||
-        strncmp(termtype, "macterm", 7)     != 0 ||
-        strncmp(termtype, "mintty", 6)      != 0 ||
-        strncmp(termtype, "conemu", 6)      != 0 ||
-        strncmp(termtype, "tinyterm", 8)    != 0 ||
-        strncmp(termtype, "terminator", 6)  != 0 ||
-        strncmp(termtype, "lxterminal", 6)  != 0 ||
-        strncmp(termtype, "lxterminal", 6)  != 0 ||
-        // substring finding
-        strstr(termtype, "truecolor")   != NULL ||
-        strstr(termtype, "TRUECOLOR")   != NULL ||
-        strstr(termtype, "RGB")         != NULL ||
-        strstr(termtype, "rgb")         != NULL ||
-        strstr(termtype, "24bit")       != NULL ||
-        strstr(termtype, "24-bit")      != NULL ||
-        strstr(termtype, "libvte")      != NULL) {
+    if (strncmp(termtype, "xterm", 5)) {
         return NULL;
     }
-    // clang-format on
 
     switch (termtype[5]) {
         case 0:
