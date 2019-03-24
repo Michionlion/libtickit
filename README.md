@@ -61,3 +61,14 @@ in conjunction with the palette testing -- I found that my local `xterm` did not
 pass the palette test, but was capable of direct color. With these changes, now
 `$COLORTERM` can be set to `truecolor` or `24bit`, and direct color will be
 used.
+
+There were also some bugs fixed. These commits contain fixes:
+
+* ***[0c9fe2c](https://github.com/Michionlion/libtickit/commit/0c9fe2cdc832f6c5791ee1f1877918b0265a11db)***
+  * When a `Tickit` is initialized it is not cleared, and therefore the `ti_hook`
+  struct has invalid contents, since it is never set by default. This fix uses
+  `calloc()` instead of `malloc()` to allocate the memory for a `Tickit`.
+* ***[4cc85fb](https://github.com/Michionlion/libtickit/commit/4cc85fbcfb0a3ad82d87742866817490f479a802)***
+  * A TickitTermBuilder's `ti_hook` was set after it was used to build a
+  `TickitTermDriver`. This fix moves the setting to before
+  `tickit_term_build_driver()` is called.
