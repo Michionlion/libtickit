@@ -53,7 +53,7 @@ This is mirrored by the Launchpad project above.
 ### Changes
 
 There are some issues with testing in Travis CI, although locally everything
-passes out; this is likely due to `terminfo` differences.
+passes; this is likely due to `terminfo` differences.
 
 The main change in this fork is the addition of checking `$COLORTERM` for
 setting `rgb8` capabilities. This only works for `xterm` terminals, and works
