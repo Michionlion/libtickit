@@ -104,7 +104,7 @@ static void setupterm(Tickit *t) {
 static void teardownterm(Tickit *t) { t->done_setup = false; }
 
 Tickit *tickit_new_with_evloop(TickitTerm *tt, TickitEventHooks *evhooks, void *initdata) {
-    Tickit *t = malloc(sizeof(Tickit));
+    Tickit *t = calloc(1, sizeof(Tickit));
     if (!t)
         return NULL;
 
